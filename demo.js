@@ -2,7 +2,7 @@ const DRM = require('./index')
 
 const messenger = new DRM.Messenger();
 
-messenger.start( (messenger) => {
+messenger.start( (err, messenger) => {
   const eventQueue = messenger.eventQueue()
 
   eventQueue.subscribe('foo.*.b')

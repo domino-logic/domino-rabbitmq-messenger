@@ -7,21 +7,18 @@ const EventQueue = require('./EventQueue')
 class Messenger {
   constructor (options) {
     this.options = options || {}
-    this.changeExchange = this.changeExchange || 'domino_change'
+    this.changeExchange = this.options.changeExchange || 'domino_change'
+    this.amqpURL = this.options.amqp || 'amqp://localhost';
     this.assertedQueues = {}
   }
 
-  config (options) {
-    Object.assign(this.options, options)
-  }
-
   start (callback) {
-    const amqp_url = this.options.amqp || 'amqp://localhost';
-    amqp.connect(amqp_url, (err, conn) => {
-      this.AssertNoError(err);
+    amqp.connect(this.amqpURL, (err, conn) => {
+      if(err) return callback(err)
 
       conn.createChannel( (err, channel) => {
-        this.AssertNoError(err);
+        if(err) return callback(err)
+
         this.channel = channel;
         this.channel.assertExchange(
           this.changeExchange,
@@ -29,16 +26,9 @@ class Messenger {
           {durable: false}
         )
 
-        callback(this)
+        callback(null, this)
       });
     });
-  }
-
-  AssertNoError (err) {
-    if (err){
-      console.error(err);
-      process.exit(1);
-    }
   }
 
   ack (msg) {
