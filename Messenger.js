@@ -49,7 +49,7 @@ class Messenger {
     this.channel.publish(this.changeExchange, topic, body)
   }
 
-  eventQueue (callback) {
+  eventQueue () {
     return new EventQueue(this.channel, this.changeExchange);
   }
 
