@@ -21,6 +21,12 @@ class Messenger {
       conn.createChannel( (err, channel) => {
         this.AssertNoError(err);
         this.channel = channel;
+        this.channel.assertExchange(
+          exchange=this.options.changeExchange,
+          'topic',
+          {durable: false}
+        )
+
         callback(this)
       });
     });
@@ -44,6 +50,11 @@ class Messenger {
       callback(msg.content);
       this.ack(msg);
     })
+  }
+
+  broadcast (topic, json) {
+    body = new Buffer(JSON.stringify(json));
+    this.channel.publish(this.options.changeExchange, key, body)
   }
 
   publish (queue, json) {
