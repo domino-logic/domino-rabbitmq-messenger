@@ -22,7 +22,7 @@ class Messenger {
         this.AssertNoError(err);
         this.channel = channel;
         this.channel.assertExchange(
-          exchange=this.options.changeExchange,
+          this.options.changeExchange,
           'topic',
           {durable: false}
         )
