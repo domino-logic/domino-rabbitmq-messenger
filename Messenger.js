@@ -1,11 +1,13 @@
 'use strict';
 
 const amqp = require('amqplib/callback_api')
+const EventQueue = require('./EventQueue')
 
 
 class Messenger {
   constructor (options) {
     this.options = options || {}
+    this.changeExchange = this.changeExchange || 'domino_change'
     this.assertedQueues = {}
   }
 
@@ -22,7 +24,7 @@ class Messenger {
         this.AssertNoError(err);
         this.channel = channel;
         this.channel.assertExchange(
-          this.options.changeExchange,
+          this.changeExchange,
           'topic',
           {durable: false}
         )
@@ -53,8 +55,12 @@ class Messenger {
   }
 
   broadcast (topic, json) {
-    body = new Buffer(JSON.stringify(json));
-    this.channel.publish(this.options.changeExchange, key, body)
+    const body = new Buffer(JSON.stringify(json));
+    this.channel.publish(this.changeExchange, topic, body)
+  }
+
+  eventQueue (callback) {
+    return new EventQueue(this.channel, this.changeExchange);
   }
 
   publish (queue, json) {
