@@ -1,0 +1,28 @@
+{
+  "name": "domino-rabbitmq-messenger",
+  "version": "1.0.0",
+  "description": "Domino messenger interface for RabbitMQ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domino-logic/domino-rabbitmq-messenger.git"
+  },
+  "keywords": [
+    "domino",
+    "rabbitmq",
+    "mq",
+    "messaging"
+  ],
+  "author": "brice LEROY",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/domino-logic/domino-rabbitmq-messenger/issues"
+  },
+  "homepage": "https://github.com/domino-logic/domino-rabbitmq-messenger#readme",
+  "dependencies": {
+    "amqplib": "^0.4.1"
+  }
+}
