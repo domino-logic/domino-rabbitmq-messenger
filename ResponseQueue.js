@@ -16,7 +16,7 @@ class ResponseQueue {
   _trigger (msg){
     this.callbacks.forEach( (callback) => {
       const content = JSON.parse(msg.content)
-      callback({content})
+      callback(content)
     })
   }
 
