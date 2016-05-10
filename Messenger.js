@@ -71,7 +71,7 @@ class Messenger {
 
     this.channel.sendToQueue(queue, message, Object.assign({persistent: true}, options))
 
-    console.log(`Published message to ${queue}: `, json.payload)
+    console.log(`Published message to ${queue}: `, json)
   }
 
   assertQueue (queue) {
