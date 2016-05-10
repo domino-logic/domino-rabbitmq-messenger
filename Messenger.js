@@ -64,7 +64,7 @@ class Messenger {
   }
 
   publish (queue, json, responseQueue) {
-    const isReserved = /^amp\./.test(queue)
+    const isReserved = /^amq\./.test(queue)
     const message = new Buffer(JSON.stringify(json))
     const options = {persistent: true}
 
