@@ -14,9 +14,9 @@ class ResponseQueue {
   }
 
   _trigger (msg){
+    msg.content = JSON.parse(msg.content)
     this.callbacks.forEach( (callback) => {
-      const content = JSON.parse(msg.content)
-      callback(content, msg.properties.correlationId)
+      callback(content, msg)
     })
   }
 
