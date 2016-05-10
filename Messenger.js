@@ -63,16 +63,13 @@ class Messenger {
     return new EventQueue(this.channel, this.changeExchange)
   }
 
-  publish (queue, json, responseQueue) {
+  publish (queue, json, options) {
     const isReserved = /^amq\./.test(queue)
     const message = new Buffer(JSON.stringify(json))
-    const options = {persistent: true}
 
     if(!isReserved) this.assertQueue(queue)
 
-    if(responseQueue) options['replyTo'] = responseQueue.queue
-
-    this.channel.sendToQueue(queue, message, options)
+    this.channel.sendToQueue(queue, message, Object.assign({persistent: true}, options))
 
     console.log(`Published message to ${queue}: `, json.payload)
   }
