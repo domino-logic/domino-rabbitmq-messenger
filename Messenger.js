@@ -2,6 +2,7 @@
 
 const amqp = require('amqplib/callback_api')
 const EventQueue = require('./EventQueue')
+const ResponseQueue = require('./ResponseQueue')
 
 
 class Messenger {
@@ -26,7 +27,10 @@ class Messenger {
           {durable: false}
         )
 
-        callback(null, this)
+        if (this.options.rpcQueue == true)
+          this.initRpcQueue(callback)
+        else
+          callback(null, this)
       })
     })
   }
@@ -51,20 +55,24 @@ class Messenger {
     console.log(`Broadcast message to ${topic}: `, json)
   }
 
+  responseQueue () {
+    return new ResponseQueue(this.channel)
+  }
+
   eventQueue () {
     return new EventQueue(this.channel, this.changeExchange)
   }
 
-  publish (queue, json) {
+  publish (queue, json, responseQueue) {
     this.assertQueue(queue)
 
     const message = new Buffer(JSON.stringify(json))
 
-    this.channel.sendToQueue(
-      queue,
-      message,
-      {persistent: true}
-    )
+    const options = {persistent: true}
+
+    if(responseQueue) options['replyTo'] = responseQueue.queue
+
+    this.channel.sendToQueue(queue, message, options)
 
     console.log(`Published message to ${queue}: `, json.payload)
   }
