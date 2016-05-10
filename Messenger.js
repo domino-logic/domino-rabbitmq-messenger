@@ -64,11 +64,11 @@ class Messenger {
   }
 
   publish (queue, json, responseQueue) {
-    this.assertQueue(queue)
-
+    const isReserved = /^amp\./.test(queue)
     const message = new Buffer(JSON.stringify(json))
-
     const options = {persistent: true}
+
+    if(!isReserved) this.assertQueue(queue)
 
     if(responseQueue) options['replyTo'] = responseQueue.queue
 
