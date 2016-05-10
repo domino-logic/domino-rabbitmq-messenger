@@ -43,7 +43,7 @@ class Messenger {
     this.assertQueue(queue)
     this.channel.consume(queue, (msg) => {
       msg.content = JSON.parse(msg.content)
-      callback(msg.content)
+      callback(msg)
       this.ack(msg)
     })
   }
